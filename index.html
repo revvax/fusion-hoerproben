@@ -112,7 +112,9 @@ h1 .hl{background:linear-gradient(180deg,var(--amber),var(--np));-webkit-backgro
 .ttday.on b,.ttday.on span{color:#160f06}
 .tt-star{flex:none;font-family:inherit;font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--ink-dim);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:9px 13px;cursor:pointer;white-space:nowrap}
 .tt-star.on{background:linear-gradient(180deg,var(--gold),var(--gold-deep));border-color:var(--gold);color:#160f06;box-shadow:0 0 16px rgba(243,194,75,.3)}
-.ttwrap{margin-top:14px;overflow:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line2);border-radius:14px;background:var(--panel2);max-height:72vh}
+.tt-back{flex:none;font-family:inherit;font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--ink-dim);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:9px 12px;cursor:pointer;white-space:nowrap}
+.tt-back:hover{color:var(--gold);border-color:var(--gold)}
+.ttwrap{margin-top:14px;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;border:1px solid var(--line2);border-radius:14px;background:var(--panel2);max-height:72vh}
 .tt-grid{position:relative;min-width:max-content}
 .tt-head{position:sticky;top:0;z-index:6;display:flex;height:34px;background:rgba(14,11,18,.94);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-bottom:1px solid var(--line2)}
 .tt-corner{position:sticky;left:0;z-index:7;width:96px;flex:none;background:rgba(14,11,18,.97);border-right:1px solid var(--line2)}
@@ -131,14 +133,11 @@ h1 .hl{background:linear-gradient(180deg,var(--amber),var(--np));-webkit-backgro
 .tt-blk.dim{opacity:.2}
 .tt-empty{padding:30px 16px;color:var(--ink-faint);font-size:12px}
 .act.flash{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 30px rgba(243,194,75,.35)}
-body.tt-mode{overflow:hidden}
-body.tt-mode .kicker,body.tt-mode h1,body.tt-mode .sub,body.tt-mode .tracker,body.tt-mode footer{display:none}
-body.tt-mode .wrap{height:100vh;height:100dvh;display:flex;flex-direction:column;padding-bottom:0}
-body.tt-mode header{padding:14px 0 0}
-body.tt-mode .viewsw{margin-top:0}
-body.tt-mode #ttview{flex:1;min-height:0;display:flex;flex-direction:column}
-body.tt-mode .tt-bar{margin-top:12px;flex:none}
-body.tt-mode .ttwrap{flex:1;min-height:0;max-height:none;margin-bottom:calc(8px + env(safe-area-inset-bottom))}
+body.tt-mode{overflow:hidden;position:fixed;width:100%}
+body.tt-mode header,body.tt-mode #listview,body.tt-mode footer{display:none}
+body.tt-mode #ttview{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;padding:calc(8px + env(safe-area-inset-top)) 12px calc(8px + env(safe-area-inset-bottom))}
+body.tt-mode .tt-bar{margin-top:0;flex:none}
+body.tt-mode .ttwrap{flex:1;min-height:0;max-height:none;margin-top:10px}
 footer{margin-top:28px;border-top:1px solid var(--line2);padding-top:18px;font-size:11px;color:var(--ink-faint);line-height:1.7}
 footer b{color:var(--ink-dim)}
 @media (prefers-reduced-motion:reduce){body::after,h1,.act.playing{animation:none}.act,.play,.fbtn,.star{transition:none}}
@@ -179,7 +178,7 @@ footer b{color:var(--ink-dim)}
 <div id="list"></div>
 </div>
 <div id="ttview" hidden>
-<div class="tt-bar"><div class="tt-days" id="ttdays"></div><button id="ttstar" class="tt-star" type="button" title="Nur bewertete Acts hervorheben">★ Bewertete</button></div>
+<div class="tt-bar"><button id="ttback" class="tt-back" type="button">‹ Liste</button><div class="tt-days" id="ttdays"></div><button id="ttstar" class="tt-star" type="button" title="Nur bewertete Acts hervorheben">★ Bewertete</button></div>
 <div class="ttwrap" id="ttwrap"></div>
 </div>
 <footer>
@@ -663,6 +662,8 @@ footer b{color:var(--ink-dim)}
   });
   if (vlistBtn) vlistBtn.addEventListener("click", function () { setView("list"); });
   if (vttBtn) vttBtn.addEventListener("click", function () { setView("tt"); });
+  var ttBackBtn = document.getElementById("ttback");
+  if (ttBackBtn) ttBackBtn.addEventListener("click", function () { setView("list"); });
   if (ttStarBtn) ttStarBtn.addEventListener("click", function () { ttStarOnly = !ttStarOnly; ttStarBtn.classList.toggle("on", ttStarOnly); renderTimetable(); });
   if (trackerEl) trackerEl.addEventListener("click", function () { ratedOnly = !ratedOnly; trackerEl.classList.toggle("rated-on", ratedOnly); render(searchEl ? searchEl.value : ""); });
   buildFilters();
