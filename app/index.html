@@ -97,9 +97,13 @@ h1 .hl{background:linear-gradient(180deg,var(--amber),var(--np));-webkit-backgro
 .gate-btn{width:100%;margin-top:12px;background:linear-gradient(180deg,var(--gold),var(--gold-deep));border:0;border-radius:12px;color:#160f06;font-family:inherit;font-weight:500;font-size:15px;padding:14px;cursor:pointer;box-shadow:0 0 22px rgba(243,194,75,.3)}
 .gate-cancel{width:100%;margin-top:8px;background:none;border:0;color:var(--ink-faint);font-family:inherit;font-size:12px;cursor:pointer}
 .fp-card{max-width:404px}
-.fp-list{margin-top:16px;display:flex;flex-direction:column;gap:11px}
-.fp-row{display:flex;align-items:flex-start;gap:11px;font-size:13px;color:var(--ink-dim);line-height:1.42}
-.fp-ic{flex:none;width:27px;height:27px;border-radius:8px;background:rgba(243,194,75,.12);border:1px solid var(--line);display:grid;place-items:center;color:var(--gold);font-size:13px}
+.fp-hero{display:flex;gap:12px;align-items:flex-start;margin-top:16px;padding:13px;border:1px solid var(--gold);border-radius:13px;background:rgba(243,194,75,.09)}
+.fp-hero .fp-ic{width:34px;height:34px;font-size:18px}
+.fp-hero-t{font-size:15px;font-weight:700;color:#fff;line-height:1.25}
+.fp-hero-s{font-size:12.5px;color:var(--ink-dim);margin-top:3px;line-height:1.4}
+.fp-list{margin-top:11px;display:flex;flex-direction:column;gap:9px}
+.fp-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--ink-dim);line-height:1.35}
+.fp-ic{flex:none;width:24px;height:24px;border-radius:7px;background:rgba(243,194,75,.1);border:1px solid var(--line);display:grid;place-items:center;color:var(--gold);font-size:11px}
 .rate{display:flex;align-items:center;gap:11px;padding:0 16px 15px}
 .rate-lbl{font-size:9px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint)}
 .stars{display:flex;gap:3px}
@@ -154,7 +158,7 @@ body.tt-mode .ttwrap{flex:1;min-height:0;max-height:none;margin-top:10px}
 .totop{position:fixed;right:14px;bottom:calc(20px + env(safe-area-inset-bottom));z-index:30;width:54px;height:54px;border-radius:50%;border:1.5px solid var(--gold);background:radial-gradient(circle at 50% 35%,rgba(243,194,75,.18),rgba(243,194,75,.05));color:var(--gold);font-size:24px;line-height:1;display:grid;place-items:center;cursor:pointer;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .2s,transform .2s,background .15s,box-shadow .15s;box-shadow:0 6px 22px rgba(0,0,0,.5)}
 .totop.on{opacity:1;transform:none;pointer-events:auto}
 .totop:hover,.totop:active{background:var(--gold);color:#160f06;box-shadow:0 0 22px rgba(243,194,75,.45)}
-.azbar{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;align-items:center;padding:8px 6px 8px 10px;touch-action:none}
+.azbar{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;align-items:center;padding:8px 6px 8px 10px;touch-action:none;cursor:ns-resize;user-select:none;-webkit-user-select:none}
 .azbar span{font-size:9.5px;line-height:1.32;color:var(--ink-faint);font-weight:500;padding:0 2px;transition:opacity .12s}
 .azbar.drag span{opacity:0}
 .azbub{position:fixed;right:46px;top:50%;transform:translateY(-50%);z-index:31;width:74px;height:74px;border-radius:20px;background:rgba(20,14,26,.96);border:1.5px solid var(--gold);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 0 26px rgba(243,194,75,.35);display:flex;align-items:center;justify-content:center;font-family:"Massimo",sans-serif;font-size:34px;color:var(--gold);opacity:0;pointer-events:none;transition:opacity .15s}
@@ -210,7 +214,7 @@ footer b{color:var(--ink-dim)}
 </div>
 <footer>
 <p>Inoffizielles Fan-Projekt – keine Verbindung zur Fusion / Kulturkosmos e.V. SoundCloud & YouTube laufen über deren eigene Player. Deine Sterne-Wertungen bleiben nur lokal auf deinem Gerät.</p>
-<p><b>Tipp:</b> In Safari unten „Teilen“ → „Zum Home-Bildschirm“.</p>
+<p><b>Tipp:</b> Als App speichern: Browser-Menü → „Zum Startbildschirm hinzufügen“ (iPhone: Teilen-Symbol · Android: Menü ⋮).</p>
 <details class="imp"><summary>Impressum & Open Source</summary>
 <p><b>ACTS. LOVE.</b> — in 4 Stunden in Hamburg vibe-coded von REVVAX.</p>
 <p>Open Source: <a href="https://github.com/revvax/acts-love" target="_blank" rel="noopener">github.com/revvax/acts-love</a> · offen für Pull Requests — lass uns die App bis 2028 perfekt machen.</p>
@@ -334,14 +338,19 @@ footer b{color:var(--ink-dim)}
     var card = document.createElement("div"); card.className = "gate-card fp-card";
     var h = document.createElement("div"); h.className = "gate-h"; h.textContent = "Willkommen bei Acts. Love.";
     var p = document.createElement("div"); p.className = "gate-p";
-    p.textContent = "Dein persönlicher Festival-Planer: reinhören, bewerten, deine Acts planen — alles offline auf deinem Gerät.";
+    p.textContent = "Dein persönlicher Festival-Planer: reinhören, bewerten, Acts planen.";
+    var hero = document.createElement("div"); hero.className = "fp-hero";
+    var hic = document.createElement("span"); hic.className = "fp-ic"; hic.textContent = "⌂";
+    var htx = document.createElement("div");
+    var ht = document.createElement("div"); ht.className = "fp-hero-t"; ht.textContent = "Als App speichern → offline nutzbar";
+    var hs = document.createElement("div"); hs.className = "fp-hero-s"; hs.textContent = "Über das Browser-Menü „Zum Startbildschirm hinzufügen“ — iPhone: Teilen-Symbol, Android: Menü ⋮. Danach läuft alles ohne Netz.";
+    htx.appendChild(ht); htx.appendChild(hs); hero.appendChild(hic); hero.appendChild(htx);
     var ul = document.createElement("div"); ul.className = "fp-list";
     var items = [
-      ["▶", "Tippen = Hörprobe spielt sofort (SoundCloud/YouTube)"],
-      ["★", "Bewerte Acts mit 1–5 Sternen — bleibt privat auf deinem Gerät"],
-      ["▦", "Timetable zeigt, wann & wo wer spielt"],
-      ["↓", "Runterziehen lädt neu; A–Z rechts springt schnell"],
-      ["⌂", "Für offline: in Safari „Teilen“ → „Zum Home-Bildschirm“"]
+      ["▶", "Tippen = Hörprobe spielt sofort"],
+      ["★", "Mit 1–5 Sternen bewerten — privat auf dem Gerät"],
+      ["▦", "Timetable: wann & wo wer spielt"],
+      ["↓", "Runterziehen lädt neu; A–Z springt schnell"]
     ];
     items.forEach(function (it) {
       var row = document.createElement("div"); row.className = "fp-row";
@@ -351,7 +360,7 @@ footer b{color:var(--ink-dim)}
     });
     var btn = document.createElement("button"); btn.className = "gate-btn"; btn.type = "button"; btn.textContent = "Los geht’s";
     btn.addEventListener("click", function () { if (ov.parentNode) ov.parentNode.removeChild(ov); showGate(false); });
-    card.appendChild(h); card.appendChild(p); card.appendChild(ul); card.appendChild(btn);
+    card.appendChild(h); card.appendChild(p); card.appendChild(hero); card.appendChild(ul); card.appendChild(btn);
     ov.appendChild(card); document.body.appendChild(ov);
   }
 
@@ -770,9 +779,10 @@ footer b{color:var(--ink-dim)}
     azbarEl.addEventListener("touchmove", function (e) { e.preventDefault(); handle(e.touches[0].clientY); }, { passive: false });
     azbarEl.addEventListener("touchend", endDrag);
     azbarEl.addEventListener("touchcancel", endDrag);
-    azbarEl.addEventListener("mousedown", function (e) { handle(e.clientY); });
-    azbarEl.addEventListener("mouseup", endDrag);
-    azbarEl.addEventListener("mouseleave", endDrag);
+    var dragging = false;
+    azbarEl.addEventListener("mousedown", function (e) { e.preventDefault(); dragging = true; handle(e.clientY); });
+    document.addEventListener("mousemove", function (e) { if (dragging) handle(e.clientY); });
+    document.addEventListener("mouseup", function () { if (dragging) { dragging = false; endDrag(); } });
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
   }

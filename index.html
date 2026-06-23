@@ -148,7 +148,7 @@ body.tt-mode .ttwrap{flex:1;min-height:0;max-height:none;margin-top:10px}
 .totop{position:fixed;right:14px;bottom:calc(20px + env(safe-area-inset-bottom));z-index:30;width:54px;height:54px;border-radius:50%;border:1.5px solid var(--gold);background:radial-gradient(circle at 50% 35%,rgba(243,194,75,.18),rgba(243,194,75,.05));color:var(--gold);font-size:24px;line-height:1;display:grid;place-items:center;cursor:pointer;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .2s,transform .2s,background .15s,box-shadow .15s;box-shadow:0 6px 22px rgba(0,0,0,.5)}
 .totop.on{opacity:1;transform:none;pointer-events:auto}
 .totop:hover,.totop:active{background:var(--gold);color:#160f06;box-shadow:0 0 22px rgba(243,194,75,.45)}
-.azbar{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;align-items:center;padding:8px 6px 8px 10px;touch-action:none}
+.azbar{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;align-items:center;padding:8px 6px 8px 10px;touch-action:none;cursor:ns-resize;user-select:none;-webkit-user-select:none}
 .azbar span{font-size:9.5px;line-height:1.32;color:var(--ink-faint);font-weight:500;padding:0 2px;transition:opacity .12s}
 .azbar.drag span{opacity:0}
 .azbub{position:fixed;right:46px;top:50%;transform:translateY(-50%);z-index:31;width:74px;height:74px;border-radius:20px;background:rgba(20,14,26,.96);border:1.5px solid var(--gold);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 0 26px rgba(243,194,75,.35);display:flex;align-items:center;justify-content:center;font-family:"Massimo",sans-serif;font-size:34px;color:var(--gold);opacity:0;pointer-events:none;transition:opacity .15s}
@@ -204,7 +204,7 @@ footer b{color:var(--ink-dim)}
 </div>
 <footer>
 <p>Inoffizielles Fan-Projekt – keine Verbindung zur Fusion / Kulturkosmos e.V. SoundCloud & YouTube laufen über deren eigene Player. Deine Sterne-Wertungen bleiben nur lokal auf deinem Gerät.</p>
-<p><b>Tipp:</b> In Safari unten „Teilen“ → „Zum Home-Bildschirm“.</p>
+<p><b>Tipp:</b> Als App speichern: Browser-Menü → „Zum Startbildschirm hinzufügen“ (iPhone: Teilen-Symbol · Android: Menü ⋮).</p>
 <details class="imp"><summary>Impressum & Open Source</summary>
 <p><b>ACTS. LOVE.</b> — in 4 Stunden in Hamburg vibe-coded von REVVAX.</p>
 <p>Open Source: <a href="https://github.com/revvax/acts-love" target="_blank" rel="noopener">github.com/revvax/acts-love</a> · offen für Pull Requests — lass uns die App bis 2028 perfekt machen.</p>
@@ -739,9 +739,10 @@ footer b{color:var(--ink-dim)}
     azbarEl.addEventListener("touchmove", function (e) { e.preventDefault(); handle(e.touches[0].clientY); }, { passive: false });
     azbarEl.addEventListener("touchend", endDrag);
     azbarEl.addEventListener("touchcancel", endDrag);
-    azbarEl.addEventListener("mousedown", function (e) { handle(e.clientY); });
-    azbarEl.addEventListener("mouseup", endDrag);
-    azbarEl.addEventListener("mouseleave", endDrag);
+    var dragging = false;
+    azbarEl.addEventListener("mousedown", function (e) { e.preventDefault(); dragging = true; handle(e.clientY); });
+    document.addEventListener("mousemove", function (e) { if (dragging) handle(e.clientY); });
+    document.addEventListener("mouseup", function () { if (dragging) { dragging = false; endDrag(); } });
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
   }
