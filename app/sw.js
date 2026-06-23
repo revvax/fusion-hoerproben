@@ -2,7 +2,7 @@
  * App-Shell (HTML + Icons + Manifest) wird gecacht; SoundCloud/YouTube/Fonts
  * brauchen Netz und schlagen offline einfach fehl (Wertungen + Timetable
  * liegen lokal und funktionieren ohne Netz). */
-var CACHE = "fusion-hp-v5";
+var CACHE = "fusion-hp-v6";
 var ASSETS = [
   "./",
   "./index.html",

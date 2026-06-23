@@ -133,6 +133,14 @@ h1 .hl{background:linear-gradient(180deg,var(--amber),var(--np));-webkit-backgro
 .tt-blk.dim{opacity:.2}
 .tt-empty{padding:30px 16px;color:var(--ink-faint);font-size:12px}
 .act.flash{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 30px rgba(243,194,75,.35)}
+body.tt-mode{overflow:hidden}
+body.tt-mode .kicker,body.tt-mode h1,body.tt-mode .sub,body.tt-mode .tracker,body.tt-mode footer{display:none}
+body.tt-mode .wrap{height:100vh;height:100dvh;display:flex;flex-direction:column;padding-bottom:0}
+body.tt-mode header{padding:14px 0 0}
+body.tt-mode .viewsw{margin-top:0}
+body.tt-mode #ttview{flex:1;min-height:0;display:flex;flex-direction:column}
+body.tt-mode .tt-bar{margin-top:12px;flex:none}
+body.tt-mode .ttwrap{flex:1;min-height:0;max-height:none;margin-bottom:calc(8px + env(safe-area-inset-bottom))}
 footer{margin-top:28px;border-top:1px solid var(--line2);padding-top:18px;font-size:11px;color:var(--ink-faint);line-height:1.7}
 footer b{color:var(--ink-dim)}
 @media (prefers-reduced-motion:reduce){body::after,h1,.act.playing{animation:none}.act,.play,.fbtn,.star{transition:none}}
@@ -556,6 +564,7 @@ footer b{color:var(--ink-dim)}
     if (ttViewEl) ttViewEl.hidden = !tt;
     if (vlistBtn) vlistBtn.classList.toggle("on", !tt);
     if (vttBtn) vttBtn.classList.toggle("on", tt);
+    document.body.classList.toggle("tt-mode", tt); // Vollbild: nur Zeitstrahl scrollt
     if (tt) { stopActive(); if (ttDaysEl && !ttDaysEl.children.length) buildTtDays(); renderTimetable(); }
   }
   function dateDiffDays(a, b) { return Math.round((Date.parse(a + "T12:00:00Z") - Date.parse(b + "T12:00:00Z")) / 86400000); }
