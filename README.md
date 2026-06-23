@@ -2,7 +2,7 @@
 
 Persönlicher Festival-Planer mit Hörproben, Sterne-Wertung und Timetable — als installierbare Web-App, offline nutzbar.
 
-In ~4 Stunden in Hamburg vibe-coded von **Malvin Bonnin**.
+In ~4 Stunden in Hamburg vibe-coded von **REVVAX**.
 
 **Live:** https://revvax.github.io/acts-love/app/
 
