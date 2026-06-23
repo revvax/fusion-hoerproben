@@ -2,7 +2,7 @@
  * Seite (Navigation): erst Netz (immer aktuell), bei Offline aus dem Cache.
  * Statische Dateien (Icons/Fonts/Manifest): erst Cache, sonst Netz.
  * SoundCloud/YouTube brauchen Netz und schlagen offline einfach fehl. */
-var CACHE = "fusion-hp-v14";
+var CACHE = "fusion-hp-v15";
 var ASSETS = [
   "./",
   "./index.html",
@@ -10,8 +10,8 @@ var ASSETS = [
   "./icon-192.png",
   "./icon-512.png",
   "./apple-touch-icon.png",
-  "./MassimoGrafiaPlain-Regular.woff2",
-  "./MassimoGrafiaPlain-Medium.woff2"
+  "./appfont-500.woff2",
+  "./appfont-700.woff2"
 ];
 
 self.addEventListener("install", function (e) {

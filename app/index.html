@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Fusion Hörproben">
+<meta name="apple-mobile-web-app-title" content="Fusion Acts Love">
 <meta name="theme-color" content="#0c0910">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="icon" type="image/png" href="./icon-192.png">
-<title>Fusion 2026 — Hörproben</title>
+<title>Fusion. Acts. Love.</title>
 <style>
-@font-face{font-family:"Massimo";src:url("MassimoGrafiaPlain-Regular.woff2") format("woff2"),url("MassimoGrafiaPlain-Regular.woff") format("woff");font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:"Massimo";src:url("MassimoGrafiaPlain-Medium.woff2") format("woff2"),url("MassimoGrafiaPlain-Medium.woff") format("woff");font-weight:500 800;font-style:normal;font-display:swap}
+@font-face{font-family:"Massimo";src:url("appfont-500.woff2") format("woff2");font-weight:400 600;font-style:normal;font-display:swap}
+@font-face{font-family:"Massimo";src:url("appfont-700.woff2") format("woff2");font-weight:700 900;font-style:normal;font-display:swap}
 :root{--bg:#0c0910;--bg2:#140e1a;--panel:rgba(36,27,42,.5);--panel2:rgba(20,14,26,.62);--ink:#f4ecdb;--ink-dim:#c3b29b;--ink-faint:#7a6c5c;--gold:#f3c24b;--gold-deep:#c98a25;--amber:#ff9d4d;--np:#b14dff;--nb:#36a8ff;--ng:#41ef5a;--line:rgba(243,194,75,.18);--line2:rgba(244,236,219,.09);--r:16px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
@@ -95,6 +95,10 @@ h1 .hl{background:linear-gradient(180deg,var(--amber),var(--np));-webkit-backgro
 .gate-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(243,194,75,.12)}
 .gate-btn{width:100%;margin-top:12px;background:linear-gradient(180deg,var(--gold),var(--gold-deep));border:0;border-radius:12px;color:#160f06;font-family:inherit;font-weight:500;font-size:15px;padding:14px;cursor:pointer;box-shadow:0 0 22px rgba(243,194,75,.3)}
 .gate-cancel{width:100%;margin-top:8px;background:none;border:0;color:var(--ink-faint);font-family:inherit;font-size:12px;cursor:pointer}
+.fp-card{max-width:404px}
+.fp-list{margin-top:16px;display:flex;flex-direction:column;gap:11px}
+.fp-row{display:flex;align-items:flex-start;gap:11px;font-size:13px;color:var(--ink-dim);line-height:1.42}
+.fp-ic{flex:none;width:27px;height:27px;border-radius:8px;background:rgba(243,194,75,.12);border:1px solid var(--line);display:grid;place-items:center;color:var(--gold);font-size:13px}
 .rate{display:flex;align-items:center;gap:11px;padding:0 16px 15px}
 .rate-lbl{font-size:9px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint)}
 .stars{display:flex;gap:3px}
@@ -163,8 +167,8 @@ footer b{color:var(--ink-dim)}
 <body>
 <div class="wrap">
 <header>
-<div class="kicker">ФУЗИОН 2026 · Lärz · 24.–29.06</div>
-<h1>HÖR<span class="hl">PROBEN</span></h1>
+<div class="kicker">Dein Festival-Planer · Hörproben · Wertungen</div>
+<h1>FUSION. ACTS. <span class="hl">LOVE.</span></h1>
 <div class="sub">Tipp auf <b>▶</b> — spielt sofort. Bewerte jeden Act mit <b>★</b> (1–5). <b>↗</b> = öffnet extern.</div>
 <div class="tracker" id="tracker" title="Tippen: nur deine bewerteten Acts">
 <div class="tracker-top"><span>Deine Wertungen</span><span class="t-val" id="rated"><b>0</b> / … bewertet</span></div>
@@ -199,7 +203,7 @@ footer b{color:var(--ink-dim)}
 <div class="ttwrap" id="ttwrap"></div>
 </div>
 <footer>
-<p>Automatisch erzeugt aus der offiziellen Timetable-App. SoundCloud & YouTube spielen inline (auch via Künstler-Website), Bandcamp/Sonstige öffnen extern. Deine Sterne-Wertungen bleiben nur lokal auf diesem Gerät.</p>
+<p>Inoffizielles Fan-Projekt – keine Verbindung zur Fusion / Kulturkosmos e.V. SoundCloud & YouTube laufen über deren eigene Player. Deine Sterne-Wertungen bleiben nur lokal auf deinem Gerät.</p>
 <p><b>Tipp:</b> In Safari unten „Teilen“ → „Zum Home-Bildschirm“.</p>
 </footer>
 </div>
@@ -267,7 +271,7 @@ footer b{color:var(--ink-dim)}
     if (!BMODE) return;
     if ("serviceWorker" in navigator) { try { navigator.serviceWorker.register("sw.js"); } catch (e) {} }
     buildProfileBar();
-    if (!profile) showGate(false);
+    if (!profile) showFrontpage();
   }
   function buildProfileBar() {
     var tr = document.querySelector(".tracker");
@@ -313,6 +317,31 @@ footer b{color:var(--ink-dim)}
     }
     ov.appendChild(card); document.body.appendChild(ov);
     inp.focus();
+  }
+  function showFrontpage() {
+    var ov = document.createElement("div"); ov.className = "gate";
+    var card = document.createElement("div"); card.className = "gate-card fp-card";
+    var h = document.createElement("div"); h.className = "gate-h"; h.textContent = "Willkommen bei Fusion. Acts. Love.";
+    var p = document.createElement("div"); p.className = "gate-p";
+    p.textContent = "Dein persönlicher Festival-Planer: reinhören, bewerten, deine Acts planen — alles offline auf deinem Gerät.";
+    var ul = document.createElement("div"); ul.className = "fp-list";
+    var items = [
+      ["▶", "Tippen = Hörprobe spielt sofort (SoundCloud/YouTube)"],
+      ["★", "Bewerte Acts mit 1–5 Sternen — bleibt privat auf deinem Gerät"],
+      ["▦", "Timetable zeigt, wann & wo wer spielt"],
+      ["↓", "Runterziehen lädt neu; A–Z rechts springt schnell"],
+      ["⌂", "Für offline: in Safari „Teilen“ → „Zum Home-Bildschirm“"]
+    ];
+    items.forEach(function (it) {
+      var row = document.createElement("div"); row.className = "fp-row";
+      var ic = document.createElement("span"); ic.className = "fp-ic"; ic.textContent = it[0];
+      var tx = document.createElement("span"); tx.textContent = it[1];
+      row.appendChild(ic); row.appendChild(tx); ul.appendChild(row);
+    });
+    var btn = document.createElement("button"); btn.className = "gate-btn"; btn.type = "button"; btn.textContent = "Los geht’s";
+    btn.addEventListener("click", function () { if (ov.parentNode) ov.parentNode.removeChild(ov); showGate(false); });
+    card.appendChild(h); card.appendChild(p); card.appendChild(ul); card.appendChild(btn);
+    ov.appendChild(card); document.body.appendChild(ov);
   }
 
   function ytId(u) {

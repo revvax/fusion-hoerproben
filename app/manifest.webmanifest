@@ -1,14 +1,14 @@
 {
-  "name": "Fusion 2026 Hörproben",
-  "short_name": "Fusion HP",
-  "description": "Persönlicher Fusion-Timetable mit Hörproben und Sterne-Wertung – offline nutzbar.",
+  "name": "Fusion. Acts. Love.",
+  "short_name": "Acts Love",
+  "description": "Dein persönlicher Festival-Planer mit Hörproben und Sterne-Wertung – offline nutzbar.",
   "lang": "de",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0d0d0d",
-  "theme_color": "#0d0d0d",
+  "background_color": "#0c0910",
+  "theme_color": "#0c0910",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
