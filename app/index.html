@@ -96,6 +96,7 @@ h1 .hl{background:linear-gradient(180deg,var(--amber),var(--np));-webkit-backgro
 .gate-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(243,194,75,.12)}
 .gate-btn{width:100%;margin-top:12px;background:linear-gradient(180deg,var(--gold),var(--gold-deep));border:0;border-radius:12px;color:#160f06;font-family:inherit;font-weight:500;font-size:15px;padding:14px;cursor:pointer;box-shadow:0 0 22px rgba(243,194,75,.3)}
 .gate-cancel{width:100%;margin-top:8px;background:none;border:0;color:var(--ink-faint);font-family:inherit;font-size:12px;cursor:pointer}
+.gate-err{color:#ff6a5a;font-size:12px;margin-top:9px;min-height:14px}
 .fp-card{max-width:404px}
 .fp-hero{display:flex;gap:12px;align-items:flex-start;margin-top:16px;padding:13px;border:1px solid var(--gold);border-radius:13px;background:rgba(243,194,75,.09)}
 .fp-hero .fp-ic{width:34px;height:34px;font-size:18px}
@@ -300,23 +301,38 @@ footer b{color:var(--ink-dim)}
     bar.innerHTML = "";
     var who = document.createElement("span"); who.className = "pbar-who";
     who.appendChild(document.createTextNode("👤 "));
-    var nm = document.createElement("b"); nm.textContent = profile || "—"; who.appendChild(nm);
+    var nm = document.createElement("b"); nm.textContent = (profile || "—") + (profile && readLS("fusionPin::" + profile) ? " 🔒" : ""); who.appendChild(nm);
     var ch = document.createElement("button"); ch.type = "button"; ch.className = "pbar-switch"; ch.textContent = "wechseln";
     ch.addEventListener("click", function () { showGate(true); });
     bar.appendChild(who); bar.appendChild(ch);
+  }
+  async function sha(t) {
+    var b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
+    return Array.prototype.map.call(new Uint8Array(b), function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
   }
   function showGate(isSwitch) {
     var ov = document.createElement("div"); ov.className = "gate";
     var card = document.createElement("div"); card.className = "gate-card";
     var h = document.createElement("div"); h.className = "gate-h"; h.textContent = "Dein persönlicher Timetable";
     var p = document.createElement("div"); p.className = "gate-p";
-    p.textContent = "Gib dir einen Namen. Deine Sterne bleiben privat auf diesem Gerät, getrennt von allen anderen.";
+    p.textContent = "Gib dir einen Namen. Deine Sterne bleiben nur lokal auf diesem Gerät. PIN optional — schützt dein Profil, falls mehrere dasselbe Gerät nutzen.";
     var inp = document.createElement("input"); inp.className = "gate-inp"; inp.type = "text";
     inp.id = "gateName"; inp.name = "gateName"; inp.autocomplete = "off";
-    inp.placeholder = "z. B. Malvin"; inp.value = isSwitch ? (profile || "") : ""; inp.maxLength = 40;
+    inp.placeholder = "Dein Name"; inp.value = isSwitch ? (profile || "") : ""; inp.maxLength = 40;
+    var pinInp = document.createElement("input"); pinInp.className = "gate-inp"; pinInp.type = "password";
+    pinInp.inputMode = "numeric"; pinInp.autocomplete = "off"; pinInp.placeholder = "PIN (optional)"; pinInp.maxLength = 12; pinInp.style.marginTop = "10px";
+    var err = document.createElement("div"); err.className = "gate-err";
     var btn = document.createElement("button"); btn.className = "gate-btn"; btn.type = "button"; btn.textContent = "Speichern & los";
-    function go() {
+    async function go() {
       var v = inp.value.trim(); if (!v) { inp.focus(); return; }
+      var pin = (pinInp.value || "").trim();
+      var stored = readLS("fusionPin::" + v);
+      if (stored) {
+        if (!pin) { err.textContent = "Dieses Profil ist mit PIN geschützt."; pinInp.focus(); return; }
+        if ((await sha(v + "|" + pin)) !== stored) { err.textContent = "Falscher PIN."; pinInp.value = ""; pinInp.focus(); return; }
+      } else if (pin) {
+        try { localStorage.setItem("fusionPin::" + v, await sha(v + "|" + pin)); } catch (e) {}
+      }
       profile = v; try { localStorage.setItem("fusionProfile", v); } catch (e) {}
       loadRatings();
       if (ov.parentNode) ov.parentNode.removeChild(ov);
@@ -324,7 +340,8 @@ footer b{color:var(--ink-dim)}
     }
     btn.addEventListener("click", go);
     inp.addEventListener("keydown", function (e) { if (e.key === "Enter") go(); });
-    card.appendChild(h); card.appendChild(p); card.appendChild(inp); card.appendChild(btn);
+    pinInp.addEventListener("keydown", function (e) { if (e.key === "Enter") go(); });
+    card.appendChild(h); card.appendChild(p); card.appendChild(inp); card.appendChild(pinInp); card.appendChild(err); card.appendChild(btn);
     if (isSwitch) {
       var cancel = document.createElement("button"); cancel.className = "gate-cancel"; cancel.type = "button"; cancel.textContent = "Abbrechen";
       cancel.addEventListener("click", function () { if (ov.parentNode) ov.parentNode.removeChild(ov); });
